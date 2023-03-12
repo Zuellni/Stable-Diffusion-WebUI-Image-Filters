@@ -21,9 +21,9 @@ def ui(is_extra):
 				args["pilgram_filter"] = gr.Dropdown(label = "Pilgram Filter", multiselect = True, choices = [
 					"_1977", "brannan", "brooklyn", "clarendon", "earlybird",
 					"gingham", "hudson", "inkwell", "kelvin", "lark",
-					"lofi", "maven", "mayfair", "moon", "nashville", "perpetua",
-					"reyes", "rise", "slumber", "stinson", "toaster",
-					"valencia", "walden", "willow", "xpro2",
+					"lofi", "maven", "mayfair", "moon", "nashville",
+					"perpetua", "reyes", "rise", "slumber", "stinson",
+					"toaster", "valencia", "walden", "willow", "xpro2",
 				])
 			with gr.Row():
 				args["ops_cutoff_low"] = gr.Slider(label = "Contrast Low", minimum = 0, step = 1, maximum = 50, value = 0)
