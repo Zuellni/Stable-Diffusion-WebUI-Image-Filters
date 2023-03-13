@@ -12,33 +12,35 @@ def ui(is_extra):
 
 	with gr.Group():
 		with gr.Accordion(label = script_name, open = False):
-			with gr.Row(equal_height = True):
+			with gr.Row():
 				args_main["enable"] = gr.Checkbox(label = "Enable", value = False)
-				gr.Column(scale = 4)
 				reset_button = gr.Button(value = "Reset", variant = "secondary")
-			with gr.Row(equal_height = True):
-				args_main["pillow_filters"] = gr.Dropdown(label = "Pillow Filters", multiselect = True, choices = [
-					"blur", "contour", "detail", "edge_enhance", "edge_enhance_more",
-					"emboss", "find_edges", "sharpen", "smooth", "smooth_more",
-				])
-				args_main["pilgram_filters"] = gr.Dropdown(label = "Pilgram Filters", multiselect = True, choices = [
+			with gr.Row():
+				args_main["effects"] = gr.Dropdown(label = "Effects", multiselect = True, choices = [
 					"_1977", "brannan", "brooklyn", "clarendon", "earlybird",
 					"gingham", "hudson", "inkwell", "kelvin", "lark",
 					"lofi", "maven", "mayfair", "moon", "nashville",
 					"perpetua", "reyes", "rise", "slumber", "stinson",
 					"toaster", "valencia", "walden", "willow", "xpro2",
 				])
-			with gr.Row(equal_height = True):
+				args_main["filters"] = gr.Dropdown(label = "Filters", multiselect = True, choices = [
+					"blur", "contour", "detail", "edge_enhance", "edge_enhance_more",
+					"emboss", "find_edges", "sharpen", "smooth", "smooth_more",
+				])
+				args_main["operations"] = gr.Dropdown(label = "Operations", multiselect = True, choices = [
+					"equalize", "flip", "grayscale", "invert", "mirror",
+				])
+			with gr.Row():
 				args["ops_cutoff_low"] = gr.Slider(label = "Auto Contrast Low", minimum = 0, step = 1, maximum = 50, value = 0)
 				args["ops_cutoff_high"] = gr.Slider(label = "Auto Contrast High", minimum = 0, step = 1, maximum = 50, value = 0)
 				args["filter_box_blur"] = gr.Slider(label = "Box Blur", minimum = 0, step = 1, maximum = 10, value = 0)
 				args["filter_gaussian_blur"] = gr.Slider(label = "Gaussian Blur", minimum = 0, step = 1, maximum = 10, value = 0)
-			with gr.Row(equal_height = True):
+			with gr.Row():
 				args["filter_min"] = gr.Slider(label = "Min Filter", minimum = 0, step = 1, maximum = 10, value = 0)
 				args["filter_median"] = gr.Slider(label = "Median Filter", minimum = 0, step = 1, maximum = 10, value = 0)
 				args["filter_max"] = gr.Slider(label = "Max Filter", minimum = 0, step = 1, maximum = 10, value = 0)
 				args["filter_mode"] = gr.Slider(label = "Mode Filter", minimum = 0, step = 1, maximum = 10, value = 0)
-			with gr.Row(equal_height = True):
+			with gr.Row():
 				args["enhance_brightness"] = gr.Slider(label = "Brightness", minimum = -10, step = 1, maximum = 10, value = 0)
 				args["enhance_color"] = gr.Slider(label = "Color", minimum = -10, step = 1, maximum = 10, value = 0)
 				args["enhance_contrast"] = gr.Slider(label = "Contrast", minimum = -10, step = 1, maximum = 10, value = 0)
@@ -59,17 +61,30 @@ def map_enhance(value):
 	return 0.1 * value + 1
 
 def process(
-	pp, enable, pillow_filters, pilgram_filters,
-	ops_cutoff_low, ops_cutoff_high,
-	filter_box_blur, filter_gaussian_blur,
+	pp, enable, effects, filters, operations,
+	ops_cutoff_low, ops_cutoff_high, filter_box_blur, filter_gaussian_blur,
 	filter_min, filter_median, filter_max, filter_mode,
 	enhance_brightness, enhance_color, enhance_contrast, enhance_sharpness,
 ):
 	if not enable:
 		return
 
+	for effect in effects:
+		pp.image = getattr(pilgram, effect)(pp.image)
+
+	for filter in filters:
+		pp.image = pp.image.filter(getattr(ImageFilter, filter.upper()))
+
+	for operation in operations:
+		pp.image = getattr(ImageOps, operation)(pp.image)
+
 	if ops_cutoff_low != 0 or ops_cutoff_high != 0:
 		pp.image = ImageOps.autocontrast(pp.image, (ops_cutoff_low, ops_cutoff_high), True)
+
+	if enhance_brightness != 0: pp.image = ImageEnhance.Brightness(pp.image).enhance(map_enhance(enhance_brightness))
+	if enhance_color != 0: pp.image = ImageEnhance.Color(pp.image).enhance(map_enhance(enhance_color))
+	if enhance_contrast != 0: pp.image = ImageEnhance.Contrast(pp.image).enhance(map_enhance(enhance_contrast))
+	if enhance_sharpness != 0: pp.image = ImageEnhance.Sharpness(pp.image).enhance(map_enhance(enhance_sharpness))
 
 	if filter_box_blur != 0: pp.image = pp.image.filter(ImageFilter.BoxBlur(map_filter(filter_box_blur)))
 	if filter_gaussian_blur != 0: pp.image = pp.image.filter(ImageFilter.GaussianBlur(map_filter(filter_gaussian_blur)))
@@ -78,17 +93,6 @@ def process(
 	if filter_max != 0: pp.image = pp.image.filter(ImageFilter.MaxFilter(map_filter(filter_max)))
 	if filter_median != 0: pp.image = pp.image.filter(ImageFilter.MedianFilter(map_filter(filter_median)))
 	if filter_mode != 0: pp.image = pp.image.filter(ImageFilter.ModeFilter(map_filter(filter_mode)))
-
-	if enhance_brightness != 0: pp.image = ImageEnhance.Brightness(pp.image).enhance(map_enhance(enhance_brightness))
-	if enhance_color != 0: pp.image = ImageEnhance.Color(pp.image).enhance(map_enhance(enhance_color))
-	if enhance_contrast != 0: pp.image = ImageEnhance.Contrast(pp.image).enhance(map_enhance(enhance_contrast))
-	if enhance_sharpness != 0: pp.image = ImageEnhance.Sharpness(pp.image).enhance(map_enhance(enhance_sharpness))
-
-	for filter in pillow_filters:
-		pp.image = pp.image.filter(getattr(ImageFilter, filter.upper()))
-
-	for filter in pilgram_filters:
-		pp.image = getattr(pilgram, filter)(pp.image)
 
 class Script(scripts.Script):
 	def title(self):

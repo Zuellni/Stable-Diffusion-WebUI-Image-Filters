@@ -12,7 +12,7 @@ To move this script up or down in hierarchy you should rename the `stable-diffus
 For detailed information on how each filter functions I recommend reading the Pillow documentation: [ImageEnhance](https://pillow.readthedocs.io/en/stable/reference/ImageEnhance.html), [ImageFilter](https://pillow.readthedocs.io/en/stable/reference/ImageFilter.html), [ImageOps](https://pillow.readthedocs.io/en/stable/reference/ImageOps.html).
 
 ## Preview
-![preview](https://user-images.githubusercontent.com/123005779/224696707-752b9521-8a92-4849-b122-98711b4af8fd.jpg)
+![preview](https://user-images.githubusercontent.com/123005779/224801664-661471c6-b06d-427d-b4c4-9c12b2b238a8.jpg)
 
 ## Comparison
 Base | Filtered
