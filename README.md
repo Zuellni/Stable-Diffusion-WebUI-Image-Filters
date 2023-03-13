@@ -7,7 +7,9 @@ Pilgram filters courtesy of [akiomik](https://github.com/akiomik/pilgram).
 If, after updating, certain values are not displaying correctly in the webui, you should remove all lines containing `customscript/image_filters.py` from your `user-config.js` file in the root directory.
 You can also edit the maximum values in the same file to your liking.
 
-To move this script up or down in hierarchy you should rename the `stable-diffusion-webui-image-filters` directory in `extensions`. The scripts are loaded in alphabetical order. 
+To move this script up or down in hierarchy you should rename the `stable-diffusion-webui-image-filters` directory in `extensions`. The scripts are loaded in alphabetical order.
+
+For detailed information on how each filter functions I recommend reading the Pillow documentation: [ImageEnhance](https://pillow.readthedocs.io/en/stable/reference/ImageEnhance.html), [ImageFilter](https://pillow.readthedocs.io/en/stable/reference/ImageFilter.html), [ImageOps](https://pillow.readthedocs.io/en/stable/reference/ImageOps.html).
 
 ## Preview
 ![preview](https://user-images.githubusercontent.com/123005779/224696707-752b9521-8a92-4849-b122-98711b4af8fd.jpg)
