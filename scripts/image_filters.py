@@ -4,21 +4,21 @@ import gradio as gr
 import pilgram
 
 script_name = "Image Filters"
+script_order = 100000
 
 def ui(is_extra):
 	args = {}
 
 	with gr.Group():
-		with gr.Accordion(label = script_name, open = is_extra):
+		with gr.Accordion(label = script_name, open = False):
 			with gr.Row():
 				args["enable"] = gr.Checkbox(label = "Enable", value = False)
 			with gr.Row():
-				args["pillow_filter"] = gr.Dropdown(label = "Pillow Filter", multiselect = True, choices = [
+				args["pillow_filters"] = gr.Dropdown(label = "Pillow Filters", multiselect = True, choices = [
 					"blur", "contour", "detail", "edge_enhance", "edge_enhance_more",
 					"emboss", "find_edges", "sharpen", "smooth", "smooth_more",
 				])
-			with gr.Row():
-				args["pilgram_filter"] = gr.Dropdown(label = "Pilgram Filter", multiselect = True, choices = [
+				args["pilgram_filters"] = gr.Dropdown(label = "Pilgram Filters", multiselect = True, choices = [
 					"_1977", "brannan", "brooklyn", "clarendon", "earlybird",
 					"gingham", "hudson", "inkwell", "kelvin", "lark",
 					"lofi", "maven", "mayfair", "moon", "nashville",
@@ -26,8 +26,8 @@ def ui(is_extra):
 					"toaster", "valencia", "walden", "willow", "xpro2",
 				])
 			with gr.Row():
-				args["ops_cutoff_low"] = gr.Slider(label = "Contrast Low", minimum = 0, step = 1, maximum = 50, value = 0)
-				args["ops_cutoff_high"] = gr.Slider(label = "Contrast High", minimum = 0, step = 1, maximum = 50, value = 0)
+				args["ops_cutoff_low"] = gr.Slider(label = "Cut-off Low", minimum = 0, step = 1, maximum = 50, value = 0)
+				args["ops_cutoff_high"] = gr.Slider(label = "Cut-off High", minimum = 0, step = 1, maximum = 50, value = 0)
 				args["filter_box_blur"] = gr.Slider(label = "Box Blur", minimum = -1, step = 2, maximum = 99, value = -1)
 				args["filter_gaussian_blur"] = gr.Slider(label = "Gaussian Blur", minimum = -1, step = 2, maximum = 99, value = -1)
 			with gr.Row():
@@ -44,7 +44,7 @@ def ui(is_extra):
 	return args if is_extra else list(args.values())
 
 def process(
-	pp, enable, pillow_filter, pilgram_filter,
+	pp, enable, pillow_filters, pilgram_filters,
 	ops_cutoff_low, ops_cutoff_high,
 	filter_box_blur, filter_gaussian_blur,
 	filter_min, filter_median, filter_max, filter_mode,
@@ -69,10 +69,10 @@ def process(
 	if enhance_contrast != 1: pp.image = ImageEnhance.Contrast(pp.image).enhance(enhance_contrast)
 	if enhance_sharpness != 1: pp.image = ImageEnhance.Sharpness(pp.image).enhance(enhance_sharpness)
 
-	for filter in pillow_filter:
+	for filter in pillow_filters:
 		pp.image = pp.image.filter(getattr(ImageFilter, filter.upper()))
 
-	for filter in pilgram_filter:
+	for filter in pilgram_filters:
 		pp.image = getattr(pilgram, filter)(pp.image)
 
 class Script(scripts.Script):
@@ -90,7 +90,7 @@ class Script(scripts.Script):
 
 class ScriptPostprocessing(scripts_postprocessing.ScriptPostprocessing):
 	name = script_name
-	order = 0
+	order = script_order
 
 	def ui(self):
 		return ui(True)
