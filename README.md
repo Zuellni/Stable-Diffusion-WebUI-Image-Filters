@@ -2,7 +2,7 @@
 A simple image postprocessing extension for [stable diffusion webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui). Applies various effects to generated images in pixel space just before they're saved. Works with txt2img, img2img, and in the extras tab. Pilgram filters courtesy of [akiomik](https://github.com/akiomik/pilgram).
 
 ## Preview
-![preview](https://user-images.githubusercontent.com/123005779/224670249-aed83fd8-b13f-4e55-a1c7-887616b19247.jpg)
+![preview](https://user-images.githubusercontent.com/123005779/224696707-752b9521-8a92-4849-b122-98711b4af8fd.jpg)
 
 ## Comparison
 Base | Filtered
