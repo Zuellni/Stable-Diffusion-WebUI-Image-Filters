@@ -1,6 +1,7 @@
 # Image Filters
 A simple image postprocessing extension for [stable diffusion webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui).  
-Applies various effects to generated images in pixel space just before they're saved. Works with txt2img, img2img, and in the extras tab.  
+Applies various effects to generated images in pixel space just before they're saved.  
+Works with txt2img, img2img, and in the extras tab.  
 Pilgram filters courtesy of [akiomik](https://github.com/akiomik/pilgram).
 
 ## Notes
