@@ -90,7 +90,7 @@ def process(
         pp.image = getattr(ImageOps, operation)(pp.image)
 
     if ops_cutoff_low != val_def or ops_cutoff_high != val_def:
-        pp.image = ImageOps.autocontrast(pp.image, (ops_cutoff_low, ops_cutoff_high), True)
+        pp.image = ImageOps.autocontrast(pp.image, cutoff=(ops_cutoff_low, ops_cutoff_high), preserve_tone=True)
 
     if enhance_brightness != val_def:
         pp.image = ImageEnhance.Brightness(pp.image).enhance(map_enhance(enhance_brightness))
