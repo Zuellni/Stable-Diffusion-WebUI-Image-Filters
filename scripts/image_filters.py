@@ -3,6 +3,7 @@ from modules import scripts, scripts_postprocessing
 import gradio as gr
 import pilgram
 
+
 script_name = "Image Filters"
 script_order = 100000
 val_min_enh = -10
@@ -94,24 +95,31 @@ def process(
 
     if enhance_brightness != val_def:
         pp.image = ImageEnhance.Brightness(pp.image).enhance(map_enhance(enhance_brightness))
+
     if enhance_color != val_def:
         pp.image = ImageEnhance.Color(pp.image).enhance(map_enhance(enhance_color))
+
     if enhance_contrast != val_def:
         pp.image = ImageEnhance.Contrast(pp.image).enhance(map_enhance(enhance_contrast))
+
     if enhance_sharpness != val_def:
         pp.image = ImageEnhance.Sharpness(pp.image).enhance(map_enhance(enhance_sharpness))
 
     if filter_box_blur != val_def:
         pp.image = pp.image.filter(ImageFilter.BoxBlur(map_filter(filter_box_blur)))
+
     if filter_gaussian_blur != val_def:
         pp.image = pp.image.filter(ImageFilter.GaussianBlur(map_filter(filter_gaussian_blur)))
 
     if filter_min != val_def:
         pp.image = pp.image.filter(ImageFilter.MinFilter(map_filter(filter_min)))
+
     if filter_max != val_def:
         pp.image = pp.image.filter(ImageFilter.MaxFilter(map_filter(filter_max)))
+
     if filter_median != val_def:
         pp.image = pp.image.filter(ImageFilter.MedianFilter(map_filter(filter_median)))
+
     if filter_mode != val_def:
         pp.image = pp.image.filter(ImageFilter.ModeFilter(map_filter(filter_mode)))
 
