@@ -1,8 +1,7 @@
-from PIL import ImageEnhance, ImageFilter, ImageOps
-from modules import scripts, scripts_postprocessing
 import gradio as gr
 import pilgram
-
+from modules import scripts, scripts_postprocessing
+from PIL import ImageEnhance, ImageFilter, ImageOps
 
 script_name = "Image Filters"
 script_order = 100000
